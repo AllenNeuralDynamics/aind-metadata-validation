@@ -1,4 +1,4 @@
-# hash:sha256:9492acc4469135ee28aaab7aa9f7ee950d9173128e1928cd2db5eef9e26472c3
+# hash:sha256:cbb02586e1de336bf0372227f280312d173a132895cba8b575732e8a3e5e1dce
 FROM registry.codeocean.allenneuraldynamics.org/codeocean/jupyterlab:3.0.9-miniconda4.9.2-python3.8-ubuntu20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -8,4 +8,4 @@ ARG GIT_ACCESS_TOKEN
 COPY git-askpass /
 
 RUN pip install -U --no-cache-dir \
-    aind-codeocean-api
+    aind-codeocean-api==0.2.3
