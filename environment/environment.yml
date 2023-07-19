@@ -1,0 +1,10 @@
+environment_version: 1
+credentials:
+- type: general
+  id: L8pXLEWo5006cY
+  description: CODEOCEANTOKEN
+  value: CUSTOM_KEY
+- type: general
+  id: lTwethu87NIBIn
+  description: CODEOCEANDOMAIN
+  value: CUSTOM_KEY_2
