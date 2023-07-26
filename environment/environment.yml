@@ -8,3 +8,9 @@ credentials:
   id: lTwethu87NIBIn
   description: CODEOCEANDOMAIN
   value: CUSTOM_KEY_2
+- type: aws
+  id: RoaVRMN341u8CY
+  description: AWS Credentials
+  access_key_id: AWS_ACCESS_KEY_ID
+  secret_access_key: AWS_SECRET_ACCESS_KEY
+  region: AWS_DEFAULT_REGION
