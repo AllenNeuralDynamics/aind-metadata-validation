@@ -1,3 +1,3 @@
-# aind-capsule-template
+# aind-metadata-validation
 
-Basic structure of a capsule to be customized as needed.
+Some simple notebooks for validating AIND metadata
