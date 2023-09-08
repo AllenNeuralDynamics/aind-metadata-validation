@@ -45,32 +45,70 @@ def get_unique_experimenters(doc_store_client):
     experimenters = []
 
     for record in all_files:
-        keys = record.dict().keys()
-        if 'procedures' not in keys:
-            continue
-        if not record.procedures:
-            continue
-        if 'subject_procedures' not in record.procedures.keys():
-            continue
+        
+        if 'session' in record.dict().keys():
+            session = record.session
+            if 'experimenter_full_name' in session.keys():
+                cur_experimenter = session['experimenter_full_name']
+                if type(cur_experimenter) == list:
+                    experimenters += [*cur_experimenter]
+                else:
+                    if not pd.isna(cur_experimenter):
+                        experimenters += [cur_experimenter]
+                        
             
-        print(record.procedures)
-        try: 
-            if len(record.procedures['subject_procedures']) < 2:
-                if pd.isna(record.procedures['subject_procedures']):
-                    continue
-                    
-        except:
-            if pd.isna(record.procedures['subject_procedures']):
+        if 'acquisition' in record.dict().keys():
+            acquisition = record.acquisition
+            if 'experimenter_full_name' in acquisition.keys():
+                cur_experimenter = acquisition['experimenter_full_name']
+                if type(cur_experimenter) == list:
+                    experimenters += [*cur_experimenter]
+                else:
+                    if not pd.isna(cur_experimenter):
+                        experimenters += [cur_experimenter]
+            
+        
+        for search_zone in ['subject_procedures','specimen_procedures']:
+            keys = record.dict().keys()
+            if 'procedures' not in keys:
                 continue
-          
-        for procedure in record.procedures['subject_procedures']:
-
-            if pd.isna(procedure['experimenter_full_name']):
+            if not record.procedures:
                 continue
-            curr_experimenter = procedure['experimenter_full_name']
-            if curr_experimenter:
-                experimenters += [curr_experimenter]
+                
+            procedures_file = record.procedures
+                
+            if search_zone not in procedures_file.keys():
+                continue
+            
+            procedure_bucket = procedures_file[search_zone]
+            try: 
+                if type(procedure_bucket) == list:
+                    if len(procedure_bucket) == 0:
+                        continue
+            except:
+                print(procedure_bucket)
+                print("couldnt compare size")
+            
+            try:
+                if type(procedure_bucket) != list:
+                    if pd.isna(procedure_bucket):
+                        continue
+            except:
+                
+                print("something nonetype")
+                print(procedures_file)
+                
+            if len(procedure_bucket) > 0:
+                for procedure in procedure_bucket:
+                    if 'experimenter_full_name' not in procedure.keys():
+                        continue
 
+                    if pd.isna(procedure['experimenter_full_name']):
+                        continue
+                    curr_experimenter = procedure['experimenter_full_name']
+                    if curr_experimenter:
+                        experimenters += [curr_experimenter]
+            
     return set(experimenters)
 
 
