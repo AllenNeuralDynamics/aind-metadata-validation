@@ -17,33 +17,68 @@ def generate_doc_store_client():
 
 
 
-def get_missing_files(doc_store_client):
+def get_unique_genotypes(doc_store_client):
     
     all_files = list(doc_store_client.retrieve_data_asset_records())
     
-    headers = ["id", "name", "created", "location"]
-    expected_files = ["data_description", "acquisition", "procedures", "subject", "instrument", "processing"]
-    presence = []
-
-    extra_files = []
+    genotypes = []
     
     for record in all_files:
-        present_files = record.dict().keys()
-        extra_files = [file for file in present_files if file not in expected_files if file not in extra_files]
-        present_files = set(present_files).intersection(expected_files)
-        subj = None
-        if 'data_description' in present_files:
-            if 'subject_id' in record.data_description.keys():
-                subj = record.data_description['subject_id']
+        keys = record.dict().keys()       
+        if 'subject' not in keys:
+            continue
+        if not record.subject or 'message' in record.subject.keys() or 'genotype' not in record.subject.keys():
+            continue
+        if pd.isna(record.subject['genotype']):
+            continue
+        curr_genotype = record.subject['genotype']
+        if curr_genotype:
+            genotypes += [record.subject['genotype']]
+    
+    return set(genotypes)
 
-        presence.append(
-            [
-                *[record.dict()[header] for header in headers], subj,
-                1 if '_stitched_' in record.dict()["name"] else 0,
-                *[1 if value in present_files else 0 for value in expected_files]
-            ]
-        )
-    file_presence = pd.DataFrame(presence, columns=[*headers, 'subject_id', "derived", *expected_files])
-    file_presence = file_presence.set_index('id')
 
-    return file_presence
+def get_unique_experimenters(doc_store_client):
+
+    all_files = list(doc_store_client.retrieve_data_asset_records())
+
+    experimenters = []
+
+    for record in all_files:
+        keys = record.dict().keys()
+        if 'procedures' not in keys:
+            continue
+        if not record.procedures:
+            continue
+        if 'subject_procedures' not in record.procedures.keys():
+            continue
+            
+        print(record.procedures)
+        try: 
+            if len(record.procedures['subject_procedures']) < 2:
+                if pd.isna(record.procedures['subject_procedures']):
+                    continue
+                    
+        except:
+            if pd.isna(record.procedures['subject_procedures']):
+                continue
+          
+        for procedure in record.procedures['subject_procedures']:
+
+            if pd.isna(procedure['experimenter_full_name']):
+                continue
+            curr_experimenter = procedure['experimenter_full_name']
+            if curr_experimenter:
+                experimenters += [curr_experimenter]
+
+    return set(experimenters)
+
+
+def get_unique_alleles(genotypes):
+    alleles = []
+    for genotype in genotypes:
+        for crossing in genotype.split(';'):
+            for allele in crossing.split('/'):
+                alleles += [allele]
+            
+    return set(alleles)
