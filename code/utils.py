@@ -22,7 +22,7 @@ def get_missing_files(doc_store_client):
     all_files = list(doc_store_client.retrieve_data_asset_records())
     
     headers = ["id", "name", "created", "location"]
-    expected_files = ["data_description", "acquisition", "procedures", "subject", "instrument", "processing"]
+    expected_files = ["data_description", "acquisition", "procedures", "subject", "instrument", "processing", "rig", "session"]
     presence = []
 
     extra_files = []
