@@ -1,4 +1,4 @@
-# hash:sha256:481210567dc2469f00476a31162dc9aac76c9bc4fe0a47c8b0dfb73f7524b980
+# hash:sha256:ffdd39cd1170a4286607cff69f102c1dd4eaa5ee3d645ea077ce0f2e779530d7
 FROM registry.codeocean.allenneuraldynamics.org/codeocean/jupyterlab:3.0.9-miniconda4.9.2-python3.8-ubuntu20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -19,7 +19,8 @@ RUN conda install -y \
     && conda clean -ya
 
 RUN pip install -U --no-cache-dir \
-    aind-codeocean-api==0.4.0 \
+    aind-codeocean-api==0.4.1 \
     aind-data-access-api==0.6.2 \
+    aind-data-schema==0.26.6 \
     boto3==1.28.11 \
     pymongo==4.4.1

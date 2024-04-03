@@ -4,12 +4,58 @@ import sys
 
 import pandas as pd
 
-from aind_data_access_api.document_store import DocumentStoreCredentials, Client as DsClient
+from aind_data_access_api.document_db import MetadataDbClient
+import aind_codeocean_api.codeocean as co
+
 
 
 region = os.getenv("AWS_SECRET_ACCESS_KEY")
 
+def create_co_client():
+    token = os.getenv("CUSTOM_KEY")
+    domain = os.getenv("CUSTOM_KEY_2")
 
+
+    co_client = co.CodeOceanClient(domain=domain, token=token)
+
+    return co_client
+
+def get_co_files(co_client, keys):
+    response = co_client.search_all_data_assets()
+    results = response.json()['results']
+
+    co_files = {
+        r.get("id"):
+        {
+            "id": r.get("id"),
+            "name": r.get("name"),
+            "custom_metadata": r.get("custom_metadata")
+        }
+        for r in results if r.get('id') in keys
+    }
+
+    return co_files
+
+
+def get_doc_db_records(filter_query=None):
+    """aggregate all relevant docdb files and metadata"""
+
+    DOC_DB_HOST = os.getenv("CUSTOM_KEY_3")
+    DOC_DB_DATABASE = "metadata"
+    DOC_DB_COLLECTION = "data_assets"
+
+    doc_db_client = MetadataDbClient(host=DOC_DB_HOST, database=DOC_DB_DATABASE, collection=DOC_DB_COLLECTION,)
+    
+    results = doc_db_client.retrieve_data_asset_records(filter_query=filter_query, paginate=False)
+
+    records = {item._id: item  for item in results}
+    
+    names = [item._name for item in results]
+
+    return (records, names)
+
+
+# probably depreciated
 def generate_doc_store_client():
     doc_store_creds = DocumentStoreCredentials(aws_secrets_name="aind/data/access/api/document_store/read_only")
     doc_store_client = DsClient(credentials=doc_store_creds, collection_name="data_assets")
