@@ -15,6 +15,26 @@ credentials:
   secret_access_key: AWS_SECRET_ACCESS_KEY
   region: AWS_DEFAULT_REGION
 - type: general
-  id: YkVnOZ9Nf3Zewb
+  id: 4euSHHAq0DkmuwC2
+  description: DOC_DB_SSH_PASS_PROD
+  value: DOC_DB_SSH_PASS_PROD
+- type: general
+  id: xBJVS3pRESJF4dFp
+  description: DOC_DB_PASSWORD
+  value: DOC_DB_PASSWORD
+- type: general
+  id: 5TKK26TdnmR8bCvl
   description: DOC_DB_HOST
-  value: CUSTOM_KEY_3
+  value: DOC_DB_HOST
+- type: general
+  id: fyZFc4GLQFG4zbtZ
+  description: DOC_DB_USERNAME
+  value: DOC_DB_USERNAME
+- type: general
+  id: DEvZgQwOyFdT8JYs
+  description: DOC_DB_SSH_USERNAME_PROD
+  value: DOC_DB_SSH_USERNAME_PROD
+- type: general
+  id: njNWk2WqIBBBxime
+  description: DOC_DB_SSH_HOST_PROD
+  value: DOC_DB_SSH_HOST_PROD
