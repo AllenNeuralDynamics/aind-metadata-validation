@@ -1,4 +1,4 @@
-# hash:sha256:dc1c3b09ffbb48a91ae5bf979a56e4380b06fe41941065855e5aa4e64e88a007
+# hash:sha256:afa30fcafbb000de1a970838f01e6d9ae44c6de4524a36d8cdfd4d1e5fa2fbb8
 ARG REGISTRY_HOST
 FROM $REGISTRY_HOST/codeocean/jupyterlab:3.0.9-miniconda4.9.2-python3.8-ubuntu20.04
 
@@ -31,3 +31,10 @@ RUN pip install -U --no-cache-dir \
     boto3==1.28.11 \
     pymongo==4.4.1 \
     pyopenssl==24.1.0
+
+ADD "https://github.com/coder/code-server/releases/download/v4.9.0/code-server-4.9.0-linux-amd64.tar.gz" /.code-server/code-server.tar.gz
+	
+RUN cd /.code-server \
+	&& tar -xvf code-server.tar.gz \
+	&& rm code-server.tar.gz \
+	&& ln -s /.code-server/code-server-4.9.0-linux-amd64/bin/code-server  /usr/bin/code-server
