@@ -119,7 +119,7 @@ def get_missing_files(all_files):
     presence = []
 
     extra_files = []
-    
+
     for record in all_files:
         present_files = [key for key in record.keys() if record[key]]
         extra_files = [file for file in present_files if file not in expected_files if file not in extra_files]
@@ -151,7 +151,3 @@ def get_df_totals(presence_df):
     totals["total_files"] = len(presence_df)
 
     return totals
-
-
-
-
